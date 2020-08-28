@@ -3,6 +3,8 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Loadouts.Utils;
+using Terraria.GameInput;
+using Loadouts.UI;
 
 namespace Loadouts
 {
@@ -14,6 +16,12 @@ namespace Loadouts
         {
             loadouts = new List<Loadout>();
             loadoutIndex = 0;
+        }
+
+        public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            if (Loadouts.leftArrow.JustPressed) BaseUIState.Click(1);
+            if (Loadouts.rightArrow.JustPressed) BaseUIState.Click(2);
         }
 
         public override void OnEnterWorld(Player player)

@@ -10,9 +10,13 @@ namespace Loadouts
 {
     public class Loadouts : Mod
     {
-
+        internal static ModHotKey leftArrow;
+        internal static ModHotKey rightArrow;
         public override void Load()
         {
+            leftArrow = RegisterHotKey("Decrease loadouts index", "Left");
+            rightArrow = RegisterHotKey("Increase loadouts index", "Right");
+
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
                 BaseUIState = new BaseUIState();
@@ -26,10 +30,11 @@ namespace Loadouts
         {
             BaseUserInterface = null;
             BaseUIState = null;
+            leftArrow = null;
+            rightArrow = null;
         }
 
         private GameTime _lastUpdateUiGameTime;
-
         internal UserInterface BaseUserInterface;
         internal BaseUIState BaseUIState;
         public override void UpdateUI(GameTime gameTime)
