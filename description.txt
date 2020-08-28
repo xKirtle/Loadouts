@@ -1,0 +1,3 @@
+Equipment Loadouts allows up to 10 different loadouts. Each loadout will have its own armor, accessories, vanities, dyes, and miscellaneous equipment.
+
+Made with love by Kirtle.
