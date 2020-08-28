@@ -13,7 +13,8 @@ namespace Loadouts.UI
         public UIImage loadoutBar;
         public UIText loadoutText;
         //Might want to make this a ModConfig variable?
-        private readonly int maxLoadouts = 10;
+        public static readonly int maxLoadouts = 10;
+        public static int uiPosConfig;
         public override void OnInitialize() => CreateLayout();
 
         void CreateLayout()
@@ -45,12 +46,11 @@ namespace Loadouts.UI
             Append(loadoutBar);
         }
 
-        void Click(int index)
+        public static void Click(int index)
         {
             ELPlayer mp = Main.LocalPlayer.GetModPlayer<ELPlayer>();
             //Don't want the delete request to be on hold if player clicks somewhere else
-            if (index != 0)
-                ConfirmDelete.deleteRequest = false;
+            if (index != 0) ConfirmDelete.deleteRequest = false;
 
             switch (index)
             {
@@ -98,11 +98,20 @@ namespace Loadouts.UI
                 else if (loadoutBar.IsMouseHovering) Main.LocalPlayer.mouseInterface = true;
 
                 loadoutText.SetText(Main.LocalPlayer.GetModPlayer<ELPlayer>().loadoutIndex.ToString());
-                loadoutBar.Left.Set(Main.screenWidth - 165f, 0);
-                float offsetY = Main.LocalPlayer.extraAccessory && Main.expertMode ? 155f : 110f;
 
-                if (Main.mapStyle == 1) offsetY += 255f;
-                loadoutBar.Top.Set(offsetY, 0);
+                if (uiPosConfig == 0)
+                {
+                    loadoutBar.Left.Set(Main.screenWidth - 165f, 0);
+                    float offsetY = Main.LocalPlayer.extraAccessory && Main.expertMode ? 155f : 110f;
+
+                    if (Main.mapStyle == 1) offsetY += 255f;
+                    loadoutBar.Top.Set(offsetY, 0);
+                }
+                else if (uiPosConfig == 1)
+                {
+                    loadoutBar.Left.Set(340f, 0);
+                    loadoutBar.Top.Set(265f, 0);
+                }
             }
             else { loadoutBar?.Remove(); loadoutBar = null; }
         }
