@@ -51,7 +51,7 @@ namespace Loadouts.Utils
         {
             Player player = Main.LocalPlayer;
 
-            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
+            int maxAccessoryIndex = 5 + player.GetAmountOfExtraAccessorySlotsToShow();
 
             for (int i = 0; i < 3; i++)
                 armor[i] = player.armor[i];
@@ -76,7 +76,7 @@ namespace Loadouts.Utils
         {
             Player player = Main.LocalPlayer;
 
-            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
+            int maxAccessoryIndex = 5 + player.GetAmountOfExtraAccessorySlotsToShow();
 
             for (int i = 0; i < 3; i++)
                 player.armor[i] = armor[i];
