@@ -13,8 +13,8 @@ namespace Loadouts
         private GameTime _lastUpdateUiGameTime;
         internal static UserInterface BaseUserInterface;
         internal static BaseUIState BaseUIState;
-
-        public static void Load()
+        
+        public override void Load()
         {
             if (!Main.dedServ && Main.netMode != NetmodeID.Server)
             {
@@ -25,7 +25,7 @@ namespace Loadouts
             }
         }
 
-        public static void Unload()
+        public override void Unload()
         {
             UIModSystem.BaseUserInterface = null;
             BaseUIState = null;

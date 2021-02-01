@@ -5,6 +5,7 @@ using Terraria.ModLoader.IO;
 using Loadouts.Utils;
 using Terraria.GameInput;
 using Loadouts.UI;
+using Terraria.ObjectData;
 
 namespace Loadouts
 {
@@ -12,10 +13,13 @@ namespace Loadouts
     {
         public List<Loadout> loadouts = null;
         public int loadoutIndex;
+        //Might want to make this a ModConfig variable?
+        public int saveInterval; //in minutes
         public override void Initialize()
         {
             loadouts = new List<Loadout>();
             loadoutIndex = 0;
+            saveInterval = 3;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -27,21 +31,15 @@ namespace Loadouts
         public override void OnEnterWorld(Player player)
         {
             if (loadouts.Count == 0)
-            {
-                Loadout loadout = new Loadout(true);
-                loadout.SaveLoadout();
-                loadouts.Add(loadout);
-            }
+                loadouts.Add(new Loadout(true));
         }
 
         int timer = 0;
         public override void PostUpdate()
         {
-            //Saves every 3min
-            if (timer++ == 1800)
+            if (timer++ == saveInterval * 60 * 60)
             {
-                if (loadouts != null)
-                    loadouts[loadoutIndex].SaveLoadout();
+                loadouts?[loadoutIndex].SaveLoadout();
                 timer = 0;
             }
         }

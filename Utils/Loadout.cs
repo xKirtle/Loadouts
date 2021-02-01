@@ -8,7 +8,8 @@ namespace Loadouts.Utils
     class Loadout : TagSerializable
     {
         public static readonly Func<TagCompound, Loadout> DESERIALIZER = Load;
-
+        private const int maxAccessorySlots = 7;
+        
         public List<Item> armor;
         public List<Item> vArmor;
         public List<Item> accessories;
@@ -16,7 +17,7 @@ namespace Loadouts.Utils
         public List<Item> miscEquips;
         public List<Item> dyes;
 
-        void Init()
+        List<Item>[] Init()
         {
             armor = new List<Item>(3);
             vArmor = new List<Item>(3);
@@ -24,23 +25,20 @@ namespace Loadouts.Utils
             vAccessories = new List<Item>(7);
             miscEquips = new List<Item>(5);
             dyes = new List<Item>(15);
+            
+            return new List<Item>[] {armor, vArmor, accessories, vAccessories, miscEquips, dyes};
         }
 
         public Loadout(bool firstLoadout = false)
         {
-            Init();
-
-            ArrayOfEmptyItems(armor);
-            ArrayOfEmptyItems(vArmor);
-            ArrayOfEmptyItems(accessories);
-            ArrayOfEmptyItems(vAccessories);
-            ArrayOfEmptyItems(miscEquips);
-            ArrayOfEmptyItems(dyes);
+            List<Item>[] properties = Init();
+            foreach (List<Item> property in properties)
+                PopulateList(property);
 
             if (firstLoadout)
                 SaveLoadout();
 
-            void ArrayOfEmptyItems(List<Item> list)
+            void PopulateList(List<Item> list)
             {
                 for (int i = 0; i < list.Capacity; i++)
                     list.Add(new Item());
@@ -49,20 +47,18 @@ namespace Loadouts.Utils
 
         public void SaveLoadout()
         {
-            Player player = Main.LocalPlayer;
-
-            int maxAccessoryIndex = 5 + player.GetAmountOfExtraAccessorySlotsToShow();
-
+             Player player = Main.LocalPlayer;
+            
             for (int i = 0; i < 3; i++)
                 armor[i] = player.armor[i];
 
             for (int i = 10; i < 13; i++)
                 vArmor[i - 10] = player.armor[i];
 
-            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
+            for (int i = 3; i < 3 + maxAccessorySlots; i++)
                 accessories[i - 3] = player.armor[i];
 
-            for (int i = 13; i < 13 + maxAccessoryIndex; i++)
+            for (int i = 13; i < 13 + maxAccessorySlots; i++)
                 vAccessories[i - 13] = player.armor[i];
 
             for (int i = 0; i < 5; i++)
@@ -75,19 +71,17 @@ namespace Loadouts.Utils
         public void LoadLoadout()
         {
             Player player = Main.LocalPlayer;
-
-            int maxAccessoryIndex = 5 + player.GetAmountOfExtraAccessorySlotsToShow();
-
+            
             for (int i = 0; i < 3; i++)
                 player.armor[i] = armor[i];
 
             for (int i = 10; i < 13; i++)
                 player.armor[i] = vArmor[i - 10];
 
-            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
+            for (int i = 3; i < 3 + maxAccessorySlots; i++)
                 player.armor[i] = accessories[i - 3];
 
-            for (int i = 13; i < 13 + maxAccessoryIndex; i++)
+            for (int i = 13; i < 13 + maxAccessorySlots; i++)
                 player.armor[i] = vAccessories[i - 13];
 
             for (int i = 0; i < 5; i++)

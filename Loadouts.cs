@@ -16,13 +16,10 @@ namespace Loadouts
         {
             leftArrow = RegisterHotKey("Decrease loadouts index", "Left");
             rightArrow = RegisterHotKey("Increase loadouts index", "Right");
-
-            UIModSystem.Load();
         }
 
         public override void Unload()
         {
-            UIModSystem.Unload();
             leftArrow = null;
             rightArrow = null;
         }
