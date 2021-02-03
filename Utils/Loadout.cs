@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ModLoader.IO;
 
@@ -8,7 +9,8 @@ namespace Loadouts.Utils
     class Loadout : TagSerializable
     {
         public static readonly Func<TagCompound, Loadout> DESERIALIZER = Load;
-
+        private const int maxAccessorySlots = 7;
+        
         public List<Item> armor;
         public List<Item> vArmor;
         public List<Item> accessories;
@@ -16,53 +18,33 @@ namespace Loadouts.Utils
         public List<Item> miscEquips;
         public List<Item> dyes;
 
-        void Init()
-        {
-            armor = new List<Item>(3);
-            vArmor = new List<Item>(3);
-            accessories = new List<Item>(7);
-            vAccessories = new List<Item>(7);
-            miscEquips = new List<Item>(5);
-            dyes = new List<Item>(15);
-        }
-
         public Loadout(bool firstLoadout = false)
-        {
-            Init();
-
-            ArrayOfEmptyItems(armor);
-            ArrayOfEmptyItems(vArmor);
-            ArrayOfEmptyItems(accessories);
-            ArrayOfEmptyItems(vAccessories);
-            ArrayOfEmptyItems(miscEquips);
-            ArrayOfEmptyItems(dyes);
+        { 
+            armor = Enumerable.Repeat(new Item(), 3).ToList();
+            vArmor = Enumerable.Repeat(new Item(), 3).ToList();
+            accessories = Enumerable.Repeat(new Item(), 7).ToList();
+            vAccessories = Enumerable.Repeat(new Item(), 7).ToList();
+            miscEquips = Enumerable.Repeat(new Item(), 5).ToList();
+            dyes = Enumerable.Repeat(new Item(), 15).ToList();
 
             if (firstLoadout)
                 SaveLoadout();
-
-            void ArrayOfEmptyItems(List<Item> list)
-            {
-                for (int i = 0; i < list.Capacity; i++)
-                    list.Add(new Item());
-            }
         }
 
         public void SaveLoadout()
         {
-            Player player = Main.LocalPlayer;
-
-            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
-
+             Player player = Main.LocalPlayer;
+            
             for (int i = 0; i < 3; i++)
                 armor[i] = player.armor[i];
 
             for (int i = 10; i < 13; i++)
                 vArmor[i - 10] = player.armor[i];
 
-            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
+            for (int i = 3; i < 3 + maxAccessorySlots; i++)
                 accessories[i - 3] = player.armor[i];
 
-            for (int i = 13; i < 13 + maxAccessoryIndex; i++)
+            for (int i = 13; i < 13 + maxAccessorySlots; i++)
                 vAccessories[i - 13] = player.armor[i];
 
             for (int i = 0; i < 5; i++)
@@ -75,19 +57,17 @@ namespace Loadouts.Utils
         public void LoadLoadout()
         {
             Player player = Main.LocalPlayer;
-
-            int maxAccessoryIndex = 5 + player.extraAccessorySlots;
-
+            
             for (int i = 0; i < 3; i++)
                 player.armor[i] = armor[i];
 
             for (int i = 10; i < 13; i++)
                 player.armor[i] = vArmor[i - 10];
 
-            for (int i = 3; i < 3 + maxAccessoryIndex; i++)
+            for (int i = 3; i < 3 + accessories.Count; i++)
                 player.armor[i] = accessories[i - 3];
 
-            for (int i = 13; i < 13 + maxAccessoryIndex; i++)
+            for (int i = 13; i < 13 + vAccessories.Count; i++)
                 player.armor[i] = vAccessories[i - 13];
 
             for (int i = 0; i < 5; i++)

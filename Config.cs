@@ -8,17 +8,18 @@ namespace Loadouts
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
-        [OptionStrings(new string[] { "Above accessories", "Below inventory" })]
-        [DefaultValue("Above accessories")]
-        public string UIPosition;
+        [Label("Loadouts auto save interval in minutes")]
+        [Range(1, 30)]
+        [DefaultValue(3)]
+        [Increment(1)]
+        public int saveInterval;
 
-        void DoSomething()
+        void UpdateInterval()
         {
-            if (UIPosition == "Above accessories") BaseUIState.uiPosConfig = 0;
-            else if (UIPosition == "Below inventory") BaseUIState.uiPosConfig = 1;
+            ELPlayer.saveInterval = saveInterval;
         }
 
-        public override void OnLoaded() => DoSomething();
-        public override void OnChanged() => DoSomething();
+        public override void OnLoaded() => UpdateInterval();
+        public override void OnChanged() => UpdateInterval();
     }
 }
