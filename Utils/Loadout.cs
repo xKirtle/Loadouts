@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.ModLoader.IO;
 
@@ -17,32 +18,17 @@ namespace Loadouts.Utils
         public List<Item> miscEquips;
         public List<Item> dyes;
 
-        List<Item>[] Init()
-        {
-            armor = new List<Item>(3);
-            vArmor = new List<Item>(3);
-            accessories = new List<Item>(7);
-            vAccessories = new List<Item>(7);
-            miscEquips = new List<Item>(5);
-            dyes = new List<Item>(15);
-            
-            return new List<Item>[] {armor, vArmor, accessories, vAccessories, miscEquips, dyes};
-        }
-
         public Loadout(bool firstLoadout = false)
-        {
-            List<Item>[] properties = Init();
-            foreach (List<Item> property in properties)
-                PopulateList(property);
+        { 
+            armor = Enumerable.Repeat(new Item(), 3).ToList();
+            vArmor = Enumerable.Repeat(new Item(), 3).ToList();
+            accessories = Enumerable.Repeat(new Item(), 7).ToList();
+            vAccessories = Enumerable.Repeat(new Item(), 7).ToList();
+            miscEquips = Enumerable.Repeat(new Item(), 5).ToList();
+            dyes = Enumerable.Repeat(new Item(), 15).ToList();
 
             if (firstLoadout)
                 SaveLoadout();
-
-            void PopulateList(List<Item> list)
-            {
-                for (int i = 0; i < list.Capacity; i++)
-                    list.Add(new Item());
-            }
         }
 
         public void SaveLoadout()

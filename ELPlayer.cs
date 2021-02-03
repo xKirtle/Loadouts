@@ -14,7 +14,7 @@ namespace Loadouts
         public List<Loadout> loadouts = null;
         public int loadoutIndex;
         //Might want to make this a ModConfig variable?
-        public int saveInterval; //in minutes
+        public static int saveInterval; //in minutes
         public override void Initialize()
         {
             loadouts = new List<Loadout>();

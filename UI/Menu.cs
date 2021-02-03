@@ -16,18 +16,17 @@ namespace Loadouts.UI
     public class Menu : DraggableUIPanel
     {
         //Might want to make this a ModConfig variable?
-        public static readonly int maxLoadouts = 10;
+        public const int maxLoadouts = 10;
         const string texturePath = "Loadouts/Textures/";
 
         private UIImage[] elements;
         private UIText loadoutText;
-        private readonly  string[] names = new string[] {"Minus", "Left", "Right", "Plus"};
+        private readonly string[] names = new string[] {"Minus", "Left", "Right", "Plus"};
         private readonly int[] offset = new int[] {14, 48, 106, 140};
         private bool isLocked;
 
         //Show/Hide stuff
         private UIElement parent;
-        private bool initialized = false;
         public bool Visible { get; private set; }
 
         public Menu() : base(ModContent.GetTexture(texturePath + "Background"))
@@ -41,7 +40,7 @@ namespace Loadouts.UI
             {
                 Vector2 MenuPosition = new Vector2(Left.Pixels, Top.Pixels);
                 Vector2 clickPos = Vector2.Subtract(element.MousePosition, MenuPosition);
-                DraggableUIPanel.canDrag = !isLocked && clickPos.X >= 10 && clickPos.Y >= 10;
+                canDrag = !isLocked && clickPos.X >= 10 && clickPos.Y >= 10;
             };
 
             elements = new UIImage[5];
@@ -72,7 +71,6 @@ namespace Loadouts.UI
             };
             Append(loadoutText);
 
-            isLocked = true;
             UIImage dragLock = new UIImage(ModContent.GetTexture(texturePath + "Lock0"))
             {
                 Width = {Pixels = 22},
@@ -91,8 +89,10 @@ namespace Loadouts.UI
             };
             elements[4] = dragLock;
             Append(dragLock);
+
+            isLocked = Visible = true;
         }
-        
+
         private void Hover(int index, bool mouseOver)
         {
             string path = texturePath + names[index];
@@ -104,11 +104,11 @@ namespace Loadouts.UI
 
             elements[index].SetImage(ModContent.GetTexture(path));
         }
-        
+
         private void LockHover(bool mouseOver)
         {
             if (mouseOver) SoundEngine.PlaySound(SoundID.MenuTick);
-            
+
             string lockName = "Lock" + (isLocked ? "0" : "1") + (mouseOver ? "Hover" : "");
             int offset = mouseOver ? 0 : 2;
             elements[4].Left.Set(offset, 0);

@@ -12,8 +12,8 @@ namespace Loadouts.UI
     public class DraggableUIPanel : UIImage
     {
         private Vector2 offset;
-        public bool dragging;
-        public static bool canDrag;
+        private bool dragging;
+        public bool canDrag;
 
         public override void MouseDown(UIMouseEvent evt)
         {
@@ -60,9 +60,6 @@ namespace Loadouts.UI
             }
         }
 
-        public DraggableUIPanel(Asset<Texture2D> texture) : base(texture)
-        {
-            
-        }
+        public DraggableUIPanel(Asset<Texture2D> texture) : base(texture) { }
     }
 }

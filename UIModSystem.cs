@@ -10,7 +10,7 @@ namespace Loadouts
 {
     public class UIModSystem : ModSystem
     {
-        private GameTime _lastUpdateUiGameTime;
+        private GameTime lastUpdateUiGameTime;
         internal static UserInterface BaseUserInterface;
         internal static BaseUIState BaseUIState;
         
@@ -33,7 +33,7 @@ namespace Loadouts
         
         public override void UpdateUI(GameTime gameTime)
         {
-            _lastUpdateUiGameTime = gameTime;
+            lastUpdateUiGameTime = gameTime;
             if (BaseUserInterface?.CurrentState != null)
                 BaseUserInterface.Update(gameTime);
         }
@@ -48,8 +48,8 @@ namespace Loadouts
                     "Loadouts: Base UI",
                     delegate
                     {
-                        if (_lastUpdateUiGameTime != null && BaseUserInterface?.CurrentState != null)
-                            BaseUserInterface.Draw(Main.spriteBatch, _lastUpdateUiGameTime);
+                        if (lastUpdateUiGameTime != null && BaseUserInterface?.CurrentState != null)
+                            BaseUserInterface.Draw(Main.spriteBatch, lastUpdateUiGameTime);
 
                         return true;
                     },
