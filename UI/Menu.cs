@@ -86,6 +86,10 @@ namespace Loadouts.UI
                 isLocked = !isLocked;
                 string lockName = "Lock" + (isLocked ? "0" : "1") + "Hover";
                 dragLock.SetImage(ModContent.GetTexture(texturePath + lockName));
+                
+                if (isLocked)
+                    Main.LocalPlayer.GetModPlayer<ELPlayer>().menuOffset =
+                        new Vector2((int) Left.Pixels, (int) Top.Pixels);
             };
             elements[4] = dragLock;
             Append(dragLock);

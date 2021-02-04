@@ -5,6 +5,7 @@ using Terraria.ModLoader.IO;
 using Loadouts.Utils;
 using Terraria.GameInput;
 using Loadouts.UI;
+using Microsoft.Xna.Framework;
 using Terraria.ObjectData;
 
 namespace Loadouts
@@ -13,12 +14,13 @@ namespace Loadouts
     {
         public List<Loadout> loadouts = null;
         public int loadoutIndex;
-        //Might want to make this a ModConfig variable?
+        public Vector2 menuOffset;
         public static int saveInterval; //in minutes
         public override void Initialize()
         {
             loadouts = new List<Loadout>();
             loadoutIndex = 0;
+            menuOffset = new Vector2(275f, 255f);
             saveInterval = 3;
         }
 
@@ -49,7 +51,8 @@ namespace Loadouts
             return new TagCompound
             {
                 { "loadouts", loadouts },
-                { "loadoutIndex", loadoutIndex }
+                { "loadoutIndex", loadoutIndex },
+                {"menuOffset", menuOffset}
             };
         }
 
@@ -60,6 +63,9 @@ namespace Loadouts
 
             if (tag.ContainsKey("loadoutIndex"))
                 loadoutIndex = tag.GetInt("loadoutIndex");
+            
+            if (tag.ContainsKey("menuOffset"))
+                menuOffset = tag.Get<Vector2>("menuOffset");
         }
     }
 }
