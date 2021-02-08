@@ -6,11 +6,11 @@ using Terraria.ModLoader.IO;
 
 namespace Loadouts.Utils
 {
-    class Loadout : TagSerializable
+    public class Loadout : TagSerializable
     {
         public static readonly Func<TagCompound, Loadout> DESERIALIZER = Load;
         private const int maxAccessorySlots = 7;
-        
+
         public List<Item> armor;
         public List<Item> vArmor;
         public List<Item> accessories;
@@ -18,8 +18,11 @@ namespace Loadouts.Utils
         public List<Item> miscEquips;
         public List<Item> dyes;
 
+        //Mod compatibility stuff (null if mod is unloaded)
+        public List<Item> wingSlot;
+
         public Loadout(bool firstLoadout = false)
-        { 
+        {
             armor = Enumerable.Repeat(new Item(), 3).ToList();
             vArmor = Enumerable.Repeat(new Item(), 3).ToList();
             accessories = Enumerable.Repeat(new Item(), 7).ToList();
@@ -33,8 +36,8 @@ namespace Loadouts.Utils
 
         public void SaveLoadout()
         {
-             Player player = Main.LocalPlayer;
-            
+            Player player = Main.LocalPlayer;
+
             for (int i = 0; i < 3; i++)
                 armor[i] = player.armor[i];
 
@@ -52,12 +55,21 @@ namespace Loadouts.Utils
 
             for (int i = 0; i < 15; i++)
                 dyes[i] = (i < 10) ? player.dye[i] : player.miscDyes[i - 10];
+
+            // if (Loadouts.wingSlot != null) 
+            // {
+            //     wingSlot.Add((Item)Loadouts.wingSlot.Call("getVanity", player.whoAmI));
+            //     wingSlot.Add((Item)Loadouts.wingSlot.Call("getEquip", player.whoAmI));
+            // }
+
+            WorldGen.saveToonWhilePlaying();
+            WorldGen.saveAndPlay();
         }
 
         public void LoadLoadout()
         {
             Player player = Main.LocalPlayer;
-            
+
             for (int i = 0; i < 3; i++)
                 player.armor[i] = armor[i];
 
@@ -78,19 +90,30 @@ namespace Loadouts.Utils
 
             for (int i = 0; i < 5; i++)
                 player.miscDyes[i] = dyes[i + 10];
+
+            // if (Loadouts.wingSlot != null)
+            // {
+            //     Loadouts.wingSlot.Call("setVanity", wingSlot[0], player.whoAmI);
+            //     Loadouts.wingSlot.Call("setEquip", wingSlot[1], player.whoAmI);
+            // }
         }
 
         public TagCompound SerializeData()
         {
-            return new TagCompound
+            TagCompound save = new TagCompound
             {
-                ["armor"] = armor,
-                ["vArmor"] = vArmor,
-                ["accessories"] = accessories,
-                ["vAccessories"] = vAccessories,
-                ["miscEquips"] = miscEquips,
-                ["dyes"] = dyes
+                {"armor", armor},
+                {"vArmor", vArmor},
+                {"accessories", accessories},
+                {"vAccessories", vAccessories},
+                {"miscEquips", miscEquips},
+                {"dyes", dyes}
             };
+
+            if (Loadouts.wingSlot != null)
+                save.Add("wingSlot", wingSlot);
+
+            return save;
         }
 
         public static Loadout Load(TagCompound tag)
@@ -104,6 +127,10 @@ namespace Loadouts.Utils
                 miscEquips = tag.Get<List<Item>>("miscEquips"),
                 dyes = tag.Get<List<Item>>("dyes"),
             };
+
+            if (tag.ContainsKey("wingSlot"))
+                loadout.wingSlot = tag.Get<List<Item>>("wingSlot");
+
             return loadout;
         }
     }
