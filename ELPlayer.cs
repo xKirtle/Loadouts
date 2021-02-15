@@ -46,7 +46,7 @@ namespace Loadouts
         {
             if (timer++ == saveInterval * 60 * 60)
             {
-                loadouts?[loadoutIndex].SaveLoadout();
+                loadouts?[loadoutIndex].SaveLoadout(true);
                 timer = 0;
             }
         }

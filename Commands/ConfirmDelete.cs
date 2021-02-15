@@ -16,6 +16,7 @@ namespace Loadouts.Commands
             if (deleteRequest)
             {
                 ELPlayer mp = Main.LocalPlayer.GetModPlayer<ELPlayer>();
+                mp.loadouts[mp.loadoutIndex].DropLoadout();
                 mp.loadouts.RemoveAt(mp.loadoutIndex);
                 mp.loadoutIndex -= mp.loadoutIndex < mp.loadouts.Count ? 0 : 1;
                 mp.loadouts[mp.loadoutIndex].LoadLoadout();

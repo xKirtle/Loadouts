@@ -131,9 +131,7 @@ namespace Loadouts.UI
                     if (!ConfirmDelete.deleteRequest && mp.loadouts.Count > 1)
                     {
                         Main.PlaySound(SoundID.MenuTick);
-                        Main.NewText(
-                            "Are you sure you want to remove this loadout? Every item in the loadout will be deleted. Type \"/confirm\" to remove it.",
-                            Color.Red);
+                        Main.NewText("Are you sure you want to remove this loadout? Type \"/confirm\" to remove it.", Color.Red);
                         ConfirmDelete.deleteRequest = true;
                     }
 

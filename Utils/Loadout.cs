@@ -18,9 +18,6 @@ namespace Loadouts.Utils
         public List<Item> miscEquips;
         public List<Item> dyes;
 
-        //Mod compatibility stuff (null if mod is unloaded)
-        public List<Item> wingSlot;
-
         public Loadout(bool firstLoadout = false)
         {
             armor = Enumerable.Repeat(new Item(), 3).ToList();
@@ -34,7 +31,7 @@ namespace Loadouts.Utils
                 SaveLoadout();
         }
 
-        public void SaveLoadout()
+        public void SaveLoadout(bool autoSave = false)
         {
             Player player = Main.LocalPlayer;
 
@@ -56,14 +53,11 @@ namespace Loadouts.Utils
             for (int i = 0; i < 15; i++)
                 dyes[i] = (i < 10) ? player.dye[i] : player.miscDyes[i - 10];
 
-            // if (Loadouts.wingSlot != null) 
-            // {
-            //     wingSlot.Add((Item)Loadouts.wingSlot.Call("getVanity", player.whoAmI));
-            //     wingSlot.Add((Item)Loadouts.wingSlot.Call("getEquip", player.whoAmI));
-            // }
-
-            WorldGen.saveToonWhilePlaying();
-            WorldGen.saveAndPlay();
+            if (autoSave)
+            {
+                WorldGen.saveToonWhilePlaying();
+                WorldGen.saveAndPlay();
+            }
         }
 
         public void LoadLoadout()
@@ -90,12 +84,30 @@ namespace Loadouts.Utils
 
             for (int i = 0; i < 5; i++)
                 player.miscDyes[i] = dyes[i + 10];
+        }
 
-            // if (Loadouts.wingSlot != null)
-            // {
-            //     Loadouts.wingSlot.Call("setVanity", wingSlot[0], player.whoAmI);
-            //     Loadouts.wingSlot.Call("setEquip", wingSlot[1], player.whoAmI);
-            // }
+        public void DropLoadout()
+        {
+            SaveLoadout();
+            Player player = Main.LocalPlayer;
+            
+            for (int i = 0; i < armor.Count; i++)
+                player.QuickSpawnItem(armor[i]);
+            
+            for (int i = 0; i < vArmor.Count; i++)
+                player.QuickSpawnItem(vArmor[i]);
+            
+            for (int i = 0; i < accessories.Count; i++)
+                player.QuickSpawnItem(accessories[i]);
+            
+            for (int i = 0; i < vAccessories.Count; i++)
+                player.QuickSpawnItem(vAccessories[i]);
+            
+            for (int i = 0; i < miscEquips.Count; i++)
+                player.QuickSpawnItem(miscEquips[i]);
+            
+            for (int i = 0; i < dyes.Count; i++)
+                player.QuickSpawnItem(dyes[i]);
         }
 
         public TagCompound SerializeData()
@@ -109,10 +121,7 @@ namespace Loadouts.Utils
                 {"miscEquips", miscEquips},
                 {"dyes", dyes}
             };
-
-            if (Loadouts.wingSlot != null)
-                save.Add("wingSlot", wingSlot);
-
+            
             return save;
         }
 
@@ -127,9 +136,6 @@ namespace Loadouts.Utils
                 miscEquips = tag.Get<List<Item>>("miscEquips"),
                 dyes = tag.Get<List<Item>>("dyes"),
             };
-
-            if (tag.ContainsKey("wingSlot"))
-                loadout.wingSlot = tag.Get<List<Item>>("wingSlot");
 
             return loadout;
         }
