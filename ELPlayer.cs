@@ -26,8 +26,8 @@ namespace Loadouts
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (Loadouts.leftArrow.JustPressed) Menu.Click(1);
-            if (Loadouts.rightArrow.JustPressed) Menu.Click(2);
+            if (Loadouts.leftArrow.JustPressed) Menu.ButtonsClick(1);
+            if (Loadouts.rightArrow.JustPressed) Menu.ButtonsClick(2);
         }
 
         public override void OnEnterWorld(Player player)

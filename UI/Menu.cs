@@ -29,7 +29,7 @@ namespace Loadouts.UI
         private UIElement parent;
         public bool Visible { get; private set; }
 
-        public Menu() : base(ModContent.GetTexture(texturePath + "Background"))
+        public Menu() : base(ModContent.Request<Texture2D>(texturePath + "Background"))
         {
             Width.Set(172, 0);
             Height.Set(46, 0);
@@ -47,16 +47,16 @@ namespace Loadouts.UI
             for (int i = 0; i < elements.Length - 1; i++)
             {
                 int index = i;
-                UIImage temp = new UIImage(ModContent.GetTexture(texturePath + names[index]))
+                UIImage temp = new UIImage(ModContent.Request<Texture2D>(texturePath + names[index]))
                 {
-                    Width = {Pixels = 28},
-                    Height = {Pixels = 28},
-                    Left = {Pixels = offset[index]},
-                    Top = {Pixels = 14}
+                    Width = { Pixels = 28 },
+                    Height = { Pixels = 28 },
+                    Left = { Pixels = offset[index] },
+                    Top = { Pixels = 14 }
                 };
-                temp.OnClick += (__, _) => Click(index);
-                temp.OnMouseOver += (__, _) => Hover(index, true);
-                temp.OnMouseOut += (__, _) => Hover(index, false);
+                temp.OnClick += (__, _) => ButtonsClick(index);
+                temp.OnMouseOver += (__, _) => ButtonsHover(index, true);
+                temp.OnMouseOut += (__, _) => ButtonsHover(index, false);
 
                 elements[index] = temp;
                 Append(temp);
@@ -64,40 +64,30 @@ namespace Loadouts.UI
 
             loadoutText = new UIText("")
             {
-                Width = {Pixels = 12},
-                Height = {Pixels = 18},
-                Left = {Pixels = 85},
-                Top = {Pixels = 19}
+                Width = { Pixels = 12 },
+                Height = { Pixels = 18 },
+                Left = { Pixels = 85 },
+                Top = { Pixels = 19 }
             };
             Append(loadoutText);
 
-            UIImage dragLock = new UIImage(ModContent.GetTexture(texturePath + "Lock0"))
+            UIImage dragLock = new UIImage(ModContent.Request<Texture2D>(texturePath + "Lock0"))
             {
-                Width = {Pixels = 22},
-                Height = {Pixels = 22},
-                Left = {Pixels = 2},
-                Top = {Pixels = 2}
+                Width = { Pixels = 22 },
+                Height = { Pixels = 22 },
+                Left = { Pixels = 2 },
+                Top = { Pixels = 2 }
             };
             dragLock.OnMouseOver += (__, _) => LockHover(true);
             dragLock.OnMouseOut += (__, _) => LockHover(false);
-            dragLock.OnClick += (__, _) =>
-            {
-                SoundEngine.PlaySound(SoundID.Unlock);
-                isLocked = !isLocked;
-                string lockName = "Lock" + (isLocked ? "0" : "1") + "Hover";
-                dragLock.SetImage(ModContent.GetTexture(texturePath + lockName));
-                
-                if (isLocked)
-                    Main.LocalPlayer.GetModPlayer<ELPlayer>().menuOffset =
-                        new Vector2((int) Left.Pixels, (int) Top.Pixels);
-            };
+            dragLock.OnClick += (__, element) => LockClick((UIImage)element);
             elements[4] = dragLock;
             Append(dragLock);
 
             isLocked = Visible = true;
         }
 
-        private void Hover(int index, bool mouseOver)
+        private void ButtonsHover(int index, bool mouseOver)
         {
             string path = texturePath + names[index];
             if (mouseOver)
@@ -106,25 +96,19 @@ namespace Loadouts.UI
                 path += "Hover";
             }
 
-            elements[index].SetImage(ModContent.GetTexture(path));
+            elements[index].SetImage(ModContent.Request<Texture2D>(path));
         }
 
-        private void LockHover(bool mouseOver)
-        {
-            if (mouseOver) SoundEngine.PlaySound(SoundID.MenuTick);
-
-            string lockName = "Lock" + (isLocked ? "0" : "1") + (mouseOver ? "Hover" : "");
-            int offset = mouseOver ? 0 : 2;
-            elements[4].Left.Set(offset, 0);
-            elements[4].Top.Set(offset, 0);
-            elements[4].SetImage(ModContent.GetTexture(texturePath + lockName));
-        }
-
-        public static void Click(int index)
+        public static void ButtonsClick(int index)
         {
             ELPlayer mp = Main.LocalPlayer.GetModPlayer<ELPlayer>();
             //Don't want the delete request to be on hold if player clicks somewhere else
-            if (index != 0) ConfirmDelete.deleteRequest = false;
+            if (index != 0 && ConfirmDelete.deleteRequest)
+            {
+                ConfirmDelete.deleteRequest = false;
+                Main.NewText("Loadout removal request cancelled.", Color.Yellow);
+            }
+            
 
             switch (index)
             {
@@ -132,9 +116,7 @@ namespace Loadouts.UI
                     if (!ConfirmDelete.deleteRequest && mp.loadouts.Count > 1)
                     {
                         SoundEngine.PlaySound(SoundID.MenuTick);
-                        Main.NewText(
-                            "Are you sure you want to remove this loadout? Every item in the loadout will be deleted. Type \"/confirm\" to remove it.",
-                            Color.Red);
+                        Main.NewText("Are you sure you want to remove this loadout? Every item in the loadout will be deleted. Type \"/confirm\" to remove it.", Color.Red);
                         ConfirmDelete.deleteRequest = true;
                     }
 
@@ -173,6 +155,32 @@ namespace Loadouts.UI
                     break;
             }
         }
+        
+        private void LockHover(bool mouseOver)
+        {
+            if (mouseOver) SoundEngine.PlaySound(SoundID.MenuTick);
+
+            string lockName = "Lock" + (isLocked ? "0" : "1") + (mouseOver ? "Hover" : "");
+            int offset = mouseOver ? 0 : 2;
+            elements[4].Left.Set(offset, 0);
+            elements[4].Top.Set(offset, 0);
+            //elements[4].SetImage(ModContent.Request<Texture2D>(texturePath + lockName));
+        }
+
+        //TODO: UIImage.SetImage() is breaking??
+        private void LockClick(UIImage element)
+        {
+            SoundEngine.PlaySound(SoundID.Unlock);
+            isLocked = !isLocked;
+            string lockName = "Lock" + (isLocked ? "0" : "1") + "Hover";
+            //element.SetImage(ModContent.Request<Texture2D>(texturePath + lockName));
+            elements[4].SetImage(Loadouts.Instance.Assets.Request<Texture2D>(texturePath + lockName));
+
+            if (isLocked)
+                Main.LocalPlayer.GetModPlayer<ELPlayer>().menuOffset =
+                    new Vector2((int) Left.Pixels, (int) Top.Pixels);
+        }
+        
 
         public void Update()
         {

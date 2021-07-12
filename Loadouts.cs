@@ -10,12 +10,12 @@ namespace Loadouts
 {
     public class Loadouts : Mod
     {
-        internal static ModHotKey leftArrow;
-        internal static ModHotKey rightArrow;
+        internal static ModKeybind leftArrow;
+        internal static ModKeybind rightArrow;
         public override void Load()
         {
-            leftArrow = RegisterHotKey("Decrease loadouts index", "Left");
-            rightArrow = RegisterHotKey("Increase loadouts index", "Right");
+            leftArrow = KeybindLoader.RegisterKeybind(this, "Decrease loadouts index", "Left");
+            rightArrow = KeybindLoader.RegisterKeybind(this, "Increase loadouts index", "Right");
         }
 
         public override void Unload()
