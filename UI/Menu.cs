@@ -164,17 +164,15 @@ namespace Loadouts.UI
             int offset = mouseOver ? 0 : 2;
             elements[4].Left.Set(offset, 0);
             elements[4].Top.Set(offset, 0);
-            //elements[4].SetImage(ModContent.Request<Texture2D>(texturePath + lockName));
+            elements[4].SetImage(ModContent.Request<Texture2D>(texturePath + lockName, AssetRequestMode.ImmediateLoad));
         }
-
-        //TODO: UIImage.SetImage() is breaking??
+        
         private void LockClick(UIImage element)
         {
             SoundEngine.PlaySound(SoundID.Unlock);
             isLocked = !isLocked;
             string lockName = "Lock" + (isLocked ? "0" : "1") + "Hover";
-            //element.SetImage(ModContent.Request<Texture2D>(texturePath + lockName));
-            elements[4].SetImage(Loadouts.Instance.Assets.Request<Texture2D>(texturePath + lockName));
+            element.SetImage(ModContent.Request<Texture2D>(texturePath + lockName, AssetRequestMode.ImmediateLoad));
 
             if (isLocked)
                 Main.LocalPlayer.GetModPlayer<ELPlayer>().menuOffset =
