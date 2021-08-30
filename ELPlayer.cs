@@ -18,7 +18,7 @@ namespace Loadouts
         public static int saveInterval; //in minutes
         public override void Initialize()
         {
-            loadouts = new List<Loadout>();
+            loadouts = new List<Loadout>() { new Loadout(true) };
             loadoutIndex = 0;
             menuOffset = new Vector2(275f, 255f);
             saveInterval = 3;
@@ -32,18 +32,21 @@ namespace Loadouts
 
         public override void OnEnterWorld(Player player)
         {
-            if (loadouts.Count == 0)
-                loadouts.Add(new Loadout(true));
+            // if (loadouts.Count == 0)
+            //     loadouts.Add(new Loadout(true));
+            
+            BaseUIState.menu.Left.Set(menuOffset.X, 0);
+            BaseUIState.menu.Top.Set(menuOffset.Y, 0);
         }
 
-        int timer = 0;
+        // int timer = 0;
         public override void PostUpdate()
         {
-            if (timer++ == saveInterval * 60 * 60)
-            {
-                loadouts?[loadoutIndex].SaveLoadout();
-                timer = 0;
-            }
+            // if (timer++ == saveInterval * 60 * 60)
+            // {
+            //     loadouts?[loadoutIndex].SaveLoadout();
+            //     timer = 0;
+            // }
         }
 
         public override TagCompound Save()
@@ -52,7 +55,7 @@ namespace Loadouts
             {
                 { "loadouts", loadouts },
                 { "loadoutIndex", loadoutIndex },
-                {"menuOffset", menuOffset}
+                { "menuOffset", menuOffset }
             };
         }
 

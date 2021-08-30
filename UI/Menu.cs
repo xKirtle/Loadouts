@@ -29,7 +29,7 @@ namespace Loadouts.UI
         private UIElement parent;
         public bool Visible { get; private set; }
 
-        public Menu() : base(ModContent.Request<Texture2D>(texturePath + "Background"))
+        public Menu() : base(ModContent.Request<Texture2D>(texturePath + "Background", AssetRequestMode.ImmediateLoad))
         {
             Width.Set(172, 0);
             Height.Set(46, 0);
@@ -47,7 +47,7 @@ namespace Loadouts.UI
             for (int i = 0; i < elements.Length - 1; i++)
             {
                 int index = i;
-                UIImage temp = new UIImage(ModContent.Request<Texture2D>(texturePath + names[index]))
+                UIImage temp = new UIImage(ModContent.Request<Texture2D>(texturePath + names[index], AssetRequestMode.ImmediateLoad))
                 {
                     Width = { Pixels = 28 },
                     Height = { Pixels = 28 },
@@ -71,7 +71,7 @@ namespace Loadouts.UI
             };
             Append(loadoutText);
 
-            UIImage dragLock = new UIImage(ModContent.Request<Texture2D>(texturePath + "Lock0"))
+            UIImage dragLock = new UIImage(ModContent.Request<Texture2D>(texturePath + "Lock0", AssetRequestMode.ImmediateLoad))
             {
                 Width = { Pixels = 22 },
                 Height = { Pixels = 22 },
@@ -96,7 +96,7 @@ namespace Loadouts.UI
                 path += "Hover";
             }
 
-            elements[index].SetImage(ModContent.Request<Texture2D>(path));
+            elements[index].SetImage(ModContent.Request<Texture2D>(path, AssetRequestMode.ImmediateLoad));
         }
 
         public static void ButtonsClick(int index)
