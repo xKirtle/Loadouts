@@ -15,14 +15,15 @@ namespace Loadouts
         public List<Loadout> loadouts;
         public int loadoutIndex;
         public Vector2 menuOffset;
-        public static int saveInterval; //in minutes
+        // public static int saveInterval; //in minutes
 
         public override void Initialize()
         {
             loadouts = new List<Loadout>();
+            loadouts.Add(new Loadout(true));
             loadoutIndex = 0;
             menuOffset = new Vector2(275f, 255f);
-            saveInterval = 3;
+            // saveInterval = 3;
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -33,22 +34,22 @@ namespace Loadouts
 
         public override void OnEnterWorld(Player player)
         {
-            if (loadouts.Count == 0)
-                loadouts.Add(new Loadout(true));
+            // if (loadouts.Count == 0)
+            //     loadouts.Add(new Loadout(true));
             
             BaseUIState.menu.Left.Set(menuOffset.X, 0);
             BaseUIState.menu.Top.Set(menuOffset.Y, 0);
         }
 
-        int timer = 0;
+        // int timer = 0;
 
         public override void PostUpdate()
         {
-            if (timer++ == saveInterval * 60 * 60)
-            {
-                loadouts?[loadoutIndex].SaveLoadout(true);
-                timer = 0;
-            }
+            // if (timer++ == saveInterval * 60 * 60)
+            // {
+            //     loadouts?[loadoutIndex].SaveLoadout(true);
+            //     timer = 0;
+            // }
         }
 
         public override TagCompound Save()
@@ -71,6 +72,14 @@ namespace Loadouts
 
             if (tag.ContainsKey("menuOffset"))
                 menuOffset = tag.Get<Vector2>("menuOffset");
+        }
+    }
+
+    public class asd : ModWorld
+    {
+        public override void Initialize()
+        {
+            base.Initialize();
         }
     }
 }

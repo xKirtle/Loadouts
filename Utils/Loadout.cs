@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader.IO;
 
 namespace Loadouts.Utils
@@ -53,7 +54,7 @@ namespace Loadouts.Utils
             for (int i = 0; i < 15; i++)
                 dyes[i] = (i < 10) ? player.dye[i] : player.miscDyes[i - 10];
 
-            if (autoSave)
+            if (autoSave && !Main.dedServ && Main.netMode != NetmodeID.Server)
             {
                 WorldGen.saveToonWhilePlaying();
                 WorldGen.saveAndPlay();

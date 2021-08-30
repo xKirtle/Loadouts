@@ -1,4 +1,4 @@
 displayName = Equipment Loadouts
 author = Kirtle
-version = 0.3
+version = 0.3.3
 homepage = https://forums.terraria.org/index.php?threads/equipment-loadouts.97433/
