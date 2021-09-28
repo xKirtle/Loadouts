@@ -49,17 +49,7 @@ namespace Loadouts
             // }
         }
 
-        public override TagCompound Save()
-        {
-            return new TagCompound
-            {
-                { "loadouts", loadouts },
-                { "loadoutIndex", loadoutIndex },
-                { "menuOffset", menuOffset }
-            };
-        }
-
-        public override void Load(TagCompound tag)
+        public override void LoadData(TagCompound tag)
         {
             if (tag.ContainsKey("loadouts"))
                 loadouts = tag.Get<List<Loadout>>("loadouts");
@@ -69,6 +59,13 @@ namespace Loadouts
             
             if (tag.ContainsKey("menuOffset"))
                 menuOffset = tag.Get<Vector2>("menuOffset");
+        }
+
+        public override void SaveData(TagCompound tag)
+        {
+            tag["loadouts"] = loadouts;
+            tag["loadoutIndex"] = loadoutIndex;
+            tag["menuOffset"] = menuOffset;
         }
     }
 }
