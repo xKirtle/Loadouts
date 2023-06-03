@@ -146,8 +146,17 @@ namespace Loadouts.UI
                         mp.loadouts[mp.loadoutIndex].SaveLoadout();
 
                         Loadout loadout = new Loadout();
-                        mp.loadouts.Add(loadout);
-                        mp.loadoutIndex = mp.loadouts.Count - 1;
+
+                        if (mp.loadoutIndex + 1 == mp.loadouts.Count)
+                        {
+                            mp.loadouts.Add(loadout);
+                            mp.loadoutIndex = mp.loadouts.Count - 1;
+                        }
+                        else
+                        {
+                            mp.loadouts.Insert(mp.loadoutIndex + 1, loadout);
+                            mp.loadoutIndex = mp.loadoutIndex + 1;
+                        }
 
                         mp.loadouts[mp.loadoutIndex].LoadLoadout();
                     }
