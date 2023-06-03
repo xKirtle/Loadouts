@@ -28,6 +28,12 @@ internal class SwapLoadout : ModCommand
             return;
         }
 
+        if (to < 0 || to + 1 >= player.loadouts.Count)
+        {
+            Main.NewText($"Equipment profile index `{args[^1]}` is not a equipment profile index.", Color.Red);
+            return;
+        }
+
         if (args.Length > 1)
         {
             if (!int.TryParse(args[0], out from))
@@ -35,6 +41,17 @@ internal class SwapLoadout : ModCommand
                 Main.NewText($"Equipment profile index `{args[^1]}` is not a valid number.", Color.Red);
                 return;
             }
+
+            if (from < 0 || from + 1 >= player.loadouts.Count)
+            {
+                Main.NewText($"Equipment profile index `{args[0]}` is not a equipment profile index.", Color.Red);
+                return;
+            }
+        }
+
+        if (from == to)
+        {
+            return;
         }
 
         var lFrom = player.loadouts[from];
