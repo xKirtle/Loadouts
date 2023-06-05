@@ -16,8 +16,8 @@ namespace Loadouts.UI
     public class Menu : DraggableUIPanel
     {
         //Might want to make this a ModConfig variable?
-        public const int maxLoadouts = 10;
-        const string texturePath = "Loadouts/Textures/";
+        public const int MaxLoadouts = 10;
+        const string TexturePath = "Loadouts/Textures/";
 
         private UIImage[] elements;
         private UIText loadoutText;
@@ -29,7 +29,7 @@ namespace Loadouts.UI
         private UIElement parent;
         public bool Visible { get; private set; }
 
-        public Menu() : base(ModContent.Request<Texture2D>(texturePath + "Background", AssetRequestMode.ImmediateLoad))
+        public Menu() : base(ModContent.Request<Texture2D>(TexturePath + "Background", AssetRequestMode.ImmediateLoad))
         {
             Width.Set(172, 0);
             Height.Set(46, 0);
@@ -47,7 +47,7 @@ namespace Loadouts.UI
             for (int i = 0; i < elements.Length - 1; i++)
             {
                 int index = i;
-                UIImage temp = new UIImage(ModContent.Request<Texture2D>(texturePath + names[index], AssetRequestMode.ImmediateLoad))
+                UIImage temp = new UIImage(ModContent.Request<Texture2D>(TexturePath + names[index], AssetRequestMode.ImmediateLoad))
                 {
                     Width = { Pixels = 28 },
                     Height = { Pixels = 28 },
@@ -71,7 +71,7 @@ namespace Loadouts.UI
             };
             Append(loadoutText);
 
-            UIImage dragLock = new UIImage(ModContent.Request<Texture2D>(texturePath + "Lock0", AssetRequestMode.ImmediateLoad))
+            UIImage dragLock = new UIImage(ModContent.Request<Texture2D>(TexturePath + "Lock0", AssetRequestMode.ImmediateLoad))
             {
                 Width = { Pixels = 22 },
                 Height = { Pixels = 22 },
@@ -89,7 +89,7 @@ namespace Loadouts.UI
 
         private void ButtonsHover(int index, bool mouseOver)
         {
-            string path = texturePath + names[index];
+            string path = TexturePath + names[index];
             if (mouseOver)
             {
                 SoundEngine.PlaySound(SoundID.MenuTick);
@@ -140,7 +140,7 @@ namespace Loadouts.UI
 
                     break;
                 case 3: //Plus
-                    if (mp.loadouts.Count < maxLoadouts)
+                    if (mp.loadouts.Count < MaxLoadouts)
                     {
                         SoundEngine.PlaySound(SoundID.MenuTick);
                         mp.loadouts[mp.loadoutIndex].SaveLoadout();
@@ -164,7 +164,7 @@ namespace Loadouts.UI
             int offset = mouseOver ? 0 : 2;
             elements[4].Left.Set(offset, 0);
             elements[4].Top.Set(offset, 0);
-            elements[4].SetImage(ModContent.Request<Texture2D>(texturePath + lockName, AssetRequestMode.ImmediateLoad));
+            elements[4].SetImage(ModContent.Request<Texture2D>(TexturePath + lockName, AssetRequestMode.ImmediateLoad));
         }
         
         private void LockClick(UIImage element)
@@ -172,7 +172,7 @@ namespace Loadouts.UI
             SoundEngine.PlaySound(SoundID.Unlock);
             isLocked = !isLocked;
             string lockName = "Lock" + (isLocked ? "0" : "1") + "Hover";
-            element.SetImage(ModContent.Request<Texture2D>(texturePath + lockName, AssetRequestMode.ImmediateLoad));
+            element.SetImage(ModContent.Request<Texture2D>(TexturePath + lockName, AssetRequestMode.ImmediateLoad));
 
             if (isLocked)
                 Main.LocalPlayer.GetModPlayer<ELPlayer>().menuOffset =

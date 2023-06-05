@@ -1,4 +1,9 @@
 Equipment Loadouts allows up to 10 different loadouts. Each loadout will have its own armor, accessories, vanities, dyes, and miscellaneous equipment.
+You can make the menu draggable by clicking on the yellow lock (to unlock) and then save its position by locking it again.
+
+There are two commands:
+ - /swaploadout 1 would swap your active profile with profile 1
+ - /swaploadout 1 2 would swap profile 1 with profile 2
 
 Check the mod's homepage for a short video preview.
 

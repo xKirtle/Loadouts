@@ -1,0 +1,3 @@
+﻿There are two new commands (courtesy of Webmilio):
+ - `/swaploadout 1` would swap your active profile with profile 1
+ - `/swaploadout 1 2` would swap profile 1 with profile 2
